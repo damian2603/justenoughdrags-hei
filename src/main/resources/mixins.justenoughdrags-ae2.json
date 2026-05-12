@@ -1,0 +1,17 @@
+{
+  "required": false,
+  "package": "com.warmthdawn.justenoughdrags.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.8",
+  "refmap": "${mixin_refmap}",
+  "target": "@env(DEFAULT)",
+  "client": [
+    "AEBaseGuiAccessor",
+    "MixinAEBaseGui",
+    "MixinAEGuiHandler",
+    "MixinClientHelper"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

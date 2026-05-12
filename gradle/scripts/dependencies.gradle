@@ -1,0 +1,99 @@
+apply from: 'gradle/scripts/helpers.gradle'
+
+repositories {
+    // RFG already adds: Forge, MinecraftForge, CleanroomMC, MavenCentral, MavenLocal.
+
+    // Główne źródło dla większości modów (wymaga filtrowania dla optymalizacji)
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'CurseMaven'
+                url = 'https://cursemaven.com'
+            }
+        }
+        filter { includeGroup 'curse.maven' }
+    }
+
+    // Repozytorium CraftTweakera
+    maven {
+        name = 'BlameJared Maven'
+        url = 'https://maven.blamejared.com'
+    }
+
+    // Repozytorium McJty
+    maven {
+        name = 'McJty Maven'
+        url = 'https://maven.k-4u.nl'
+        content { includeGroup 'com.github.mcjty' }
+    }
+
+    // Repozytorium dla CoFH i CodeChickenLib (przeniesione z Twojego starego pliku)
+    maven {
+        name = "CoFH Maven"
+        url = "https://maven.covers1624.net"
+    }
+
+    // Zapasowe repozytorium dla starych zależności (OpenComputers/CTM)
+    maven {
+        name = "Dogforce Games"
+        url = "https://packagecloud.io/objy/dogforce-games/maven2"
+    }
+    maven {
+        name = "Tterrag Maven"
+        url = "https://maven.tterrag.com/"
+    }
+}
+
+dependencies {
+    // ---- JEI ----
+    compileOnly rfg.deobf('curse.maven:jei-238222:4538010')
+
+    // ---- CraftTweaker ----
+    compileOnly rfg.deobf('CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.554')
+
+    // ---- Blood Magic ----
+    compileOnly rfg.deobf('curse.maven:bloodmagic-224791:2822288')
+
+    // ---- Actually Additions ----
+    compileOnly rfg.deobf('curse.maven:actually-additions-228404:3117927')
+
+    // ---- CoFH stack ----
+    compileOnly rfg.deobf('curse.maven:redstone-flux-270789:2920436')
+    compileOnly rfg.deobf('curse.maven:cofh-core-69162:2920433')
+    compileOnly rfg.deobf('curse.maven:thermal-foundation-222880:2926428')
+    compileOnly rfg.deobf('curse.maven:thermal-dynamics-227443:2920505')
+
+    // ---- CodeChickenLib ----
+    compileOnly rfg.deobf('curse.maven:codechicken-lib-1-8-242818:2779848')
+
+    // ---- mcjty's mods ----
+    compileOnly rfg.deobf('curse.maven:xnet-260912:2745852')
+    compileOnly(rfg.deobf('com.github.mcjty:rftools:1.12-7.72')) {
+        exclude group: 'li.cil.oc', module: 'OpenComputers'
+        exclude group: 'team.chisel.ctm', module: 'CTM'
+    }
+    compileOnly rfg.deobf('curse.maven:mcjtylib-233105:2745846')
+
+    // ---- Other mods on CurseMaven ----
+    compileOnly rfg.deobf('curse.maven:randomthings-59816:2905241')
+    compileOnly rfg.deobf('curse.maven:modular-routers-250294:2729618')
+    compileOnly rfg.deobf('curse.maven:refined-storage-243076:2940914')
+    compileOnly rfg.deobf('curse.maven:ender-io-64578:4674244')
+    compileOnly rfg.deobf('curse.maven:endercore-231868:4671384')
+
+    // ---- AE2 ----
+    compileOnly rfg.deobf('curse.maven:ae2-extended-life-570458:5411078')
+    // ---- MouseTweaks (transitive dep of AE2 — AEBaseGui implements IMTModGuiContainer2) ----
+    compileOnly rfg.deobf('curse.maven:mousetweaks-60089:3359843')
+
+    // =========================================================================
+    // RĘCZNE NADPISANIE ZALEŻNOŚCI PRZEJŚCIOWYCH (Rozwiązanie Twojego błędu)
+    // RFTools próbuje pobrać je ze starych repozytoriów. Podajemy je z CurseMaven.
+    // =========================================================================
+    compileOnly rfg.deobf('curse.maven:opencomputers-223008:2828357') // Wersja 1.7.5.192
+    compileOnly rfg.deobf('team.chisel.ctm:CTM:MC1.12.2-1.0.1.30')           // Wersja 1.0.2.31 (zgodna z Twoim starym gradle.properties)
+
+    // ---- Runtime additions from the template ----
+    runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'
+    runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'
+}
